@@ -113,20 +113,26 @@ remember --> end1
 ## 使用手順
 ### /janken
 
-1. app5.js を起動する
-1. Webブラウザでlocalhost:8080/public/janken.htmlにアクセスする
-1. 自分の手を入力する
+1. app5.js をターミナルで起動する
+1. Webブラウザで
+```localhost:8080/public/janken.html```
+にアクセスする
+1. グー，チョキ，パーから自分の手を入力する
 
 ### /omikuji
 
-1. app5.js を起動するlocalhost:8080/public/omikuji.html
-1. Webブラウザでにアクセスする
+1. app5.js をターミナルで起動する
+1. Webブラウザで
+```localhost:8080/public/omikuji.html```
+にアクセスする
 1. 3つのラジオから1つ選択する
 
 ### /pokemon
 
-1. app5.js を起動する
-1. Webブラウザでlocalhost:8080/public/pokemon.htmlにアクセスする
+1. app5.js をターミナルで起動する
+1. Webブラウザで
+```localhost:8080/public/pokemon.html```
+にアクセスする
 1. 3つのラジオから1つ選択する
 
 ## Gitでの編集したファイルの管理
