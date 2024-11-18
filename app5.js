@@ -60,5 +60,72 @@ app.get("/janken", (req, res) => {
   res.render( 'janken', display );
 });
 
+app.get("/omikuji", (req, res) => {
+  let selected = 0;
+  if( req.query.radio1 ) selected = 1;
+  if( req.query.radio2 ) selected = 2;
+  if( req.query.radio3 ) selected = 3;
+  const num = Math.floor( Math.random() * 6 + 1 );
+  let omikuji = '';
+  if( selected==1 ){
+    if( num==1 ) omikuji = '大吉';
+    if( num==2 ) omikuji = '中吉';
+    if( num==3 ) omikuji = '小吉';
+    if( num==4 ) omikuji = '末吉';
+    if( num==5 ) omikuji = '凶';
+    if( num==6 ) omikuji = '大凶';
+  }
+  if( selected==2 ){
+    if( num==1 ) omikuji = '大吉';
+    if( num==2 ) omikuji = '中吉';
+    if( num==3 ) omikuji = '小吉';
+    if( num==4 ) omikuji = '末吉';
+    if( num==5 ) omikuji = '凶';
+    if( num==6 ) omikuji = '大凶';
+  }
+  if( selected==3 ){
+    if( num==1 ) omikuji = '大吉';
+    if( num==2 ) omikuji = '中吉';
+    if( num==3 ) omikuji = '小吉';
+    if( num==4 ) omikuji = '末吉';
+    if( num==5 ) omikuji = '凶';
+    if( num==6 ) omikuji = '大凶';
+  }
+  console.log( 'あなたの運勢は' + omikuji + 'です' );
+  res.render( 'omikuji', {number:num, omikuji:omikuji} );
+});
+
+app.get("/pokemon", (req, res) => {
+  let selected = 0;
+  if( req.query.radio1 ) selected = 1;
+  if( req.query.radio2 ) selected = 2;
+  if( req.query.radio3 ) selected = 3;
+  const num = Math.floor( Math.random() * 3 + 1 );
+  if( num==1 ) type = 'ほのおタイプ';
+  else if( num==2 ) type = 'みずタイプ';
+  else type = 'くさタイプ';
+  let judgement = '';
+  if( selected==1 ){
+    if( num==1 ) judgement = '効果今ひとつ';
+    if( num==2 ) judgement = '効果今ひとつ';
+    if( num==3 ) judgement = '効果バツグン';
+  }
+  if( selected==2 ){
+    if( num==1 ) judgement = '効果バツグン';
+    if( num==2 ) judgement = '効果今ひとつ';
+    if( num==3 ) judgement = '効果今ひとつ';
+  }
+  if( selected==3 ){
+    if( num==1 ) judgement = '効果今ひとつ';
+    if( num==2 ) judgement = '効果バツグン';
+    if( num==3 ) judgement = '効果今ひとつ';
+  }
+  const display = {
+    type: type,
+    judgement: judgement,
+  }
+  res.render( 'pokemon', display );
+});
+
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
 

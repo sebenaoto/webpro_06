@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>おみくじ</title>
+</head>
+<body>
+    <p>あなたの今日の運勢は<%= omikuji %>です．</p>
+    <p>デバッグ用：<%= omikuji %></p>
+    <form action="/omikuji">
+        <h2>次はどのおみくじを引く？</h2>
+        <input type="radio" name="radio1" id="radio1">
+        <label for="radio1">1つ目のおみくじ</label><br>
+        <input type="radio" name="radio2" id="radio2">
+        <label for="radio1">2つ目のおみくじ</label><br>
+        <input type="radio" name="radio3" id="radio3">
+        <label for="radio1">3つ目のおみくじ</label><br>
+        <input type="submit" value="送信">
+    </form>
+</body>
+</html>
