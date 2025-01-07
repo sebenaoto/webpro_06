@@ -101,7 +101,7 @@ app.post("/read", (req, res) => {
 // IDのカウンター
 let currentId = 0; 
 
-//IDを
+//IDを追加
 app.post("/post", (req, res) => {
   const name = req.body.name;
   const message = req.body.message;
@@ -113,12 +113,19 @@ app.post("/post", (req, res) => {
 });
 
 //検索機能
-app.get("/search", (req, res) => {
-  const keyword = req.query.keyword.toLowerCase();
-  const results = bbs.filter(post =>
-      post.name.toLowerCase().includes(keyword) || post.message.toLowerCase().includes(keyword)
+app.post("/search", (req, res) => {
+  const keyword = req.body.keyword?.toLowerCase() || ""; // キーワードが空の場合も考慮
+  if (!keyword) {
+      return res.json({ results: bbs }); // キーワードが空ならすべての投稿を返す
+  }
+
+  const results = bbs.filter(
+      (post) =>
+          post.name.toLowerCase().includes(keyword) ||
+          post.message.toLowerCase().includes(keyword)
   );
-  res.json(results);
+
+  res.json({ results });
 });
 
 app.get("/posts", (req, res) => {

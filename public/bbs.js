@@ -169,42 +169,68 @@ document.querySelector('#editMessage').addEventListener('click', () => {
         });
 });
 
-//検索機能
-document.querySelector('#search').addEventListener('click', () => {
-    const keyword = prompt("検索キーワードを入力してください：");
-    if (!keyword) return;
+// 検索機能
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#search").onclick = function () {
+        const keywordElement = document.querySelector("#searchKeyword");
+        
+        // 入力要素が見つからない場合のエラー処理
+        if (!keywordElement) {
+            console.error("検索キーワード入力フィールドが見つかりません");
+            alert("検索キーワード入力フィールドが見つかりません。");
+            return;
+        }
 
-    fetch(`/search?keyword=${encodeURIComponent(keyword)}`)
-        .then(response => {
-            if (!response.ok) throw new Error('検索に失敗しました');
-            return response.json();
-        })
-        .then(results => {
-            bbs.innerHTML = '';
-            results.forEach(post => {
-                let cover = document.createElement('div');
-                cover.className = 'cover';
-                cover.id = `post-${post.id}`;
+        const keyword = keywordElement.value;
 
-                let id_area = document.createElement('span');
-                id_area.className = 'id';
-                id_area.innerText = `ID: ${post.id}`;
+        const params = {
+            method: "POST",
+            body: "keyword=" + encodeURIComponent(keyword),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        };
 
-                let name_area = document.createElement('span');
-                name_area.className = 'name';
-                name_area.innerText = post.name;
+        fetch("/search", params)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("検索に失敗しました");
+                }
+                return response.json();
+            })
+            .then((response) => {
+                bbs.innerHTML = ""; // 検索結果を表示するためにクリア
+                if (response.results.length === 0) {
+                    bbs.innerHTML = "<p>検索結果がありません。</p>"; // 結果がない場合
+                    return;
+                }
 
-                let mes_area = document.createElement('span');
-                mes_area.className = 'mes';
-                mes_area.innerText = post.message;
+                response.results.forEach((post) => {
+                    let cover = document.createElement("div");
+                    cover.className = "cover";
+                    cover.id = `post-${post.id}`;
 
+                    let id_area = document.createElement("span");
+                    id_area.className = "id";
+                    id_area.innerText = `ID: ${post.id}`;
 
-                cover.appendChild(id_area);
-                cover.appendChild(name_area);
-                cover.appendChild(mes_area);
-                bbs.appendChild(cover);
+                    let name_area = document.createElement("span");
+                    name_area.className = "name";
+                    name_area.innerText = post.name;
+
+                    let mes_area = document.createElement("span");
+                    mes_area.className = "mes";
+                    mes_area.innerText = post.message;
+
+                    cover.appendChild(id_area);
+                    cover.appendChild(name_area);
+                    cover.appendChild(mes_area);
+                    bbs.appendChild(cover);
+                });
+            })
+            .catch((error) => {
+                console.error("エラー:", error);
+                alert("検索中にエラーが発生しました。もう一度お試しください。");
             });
-        })
-        .catch(error => console.error(error));
+    };
 });
-  
