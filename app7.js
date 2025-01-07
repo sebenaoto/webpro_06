@@ -114,9 +114,9 @@ app.post("/post", (req, res) => {
 
 //検索機能
 app.post("/search", (req, res) => {
-  const keyword = req.body.keyword?.toLowerCase() || ""; // キーワードが空の場合も考慮
+  const keyword = req.body.keyword?.toLowerCase() || ""; 
   if (!keyword) {
-      return res.json({ results: bbs }); // キーワードが空ならすべての投稿を返す
+      return res.json({ results: bbs });
   }
 
   const results = bbs.filter(
@@ -126,20 +126,6 @@ app.post("/search", (req, res) => {
   );
 
   res.json({ results });
-});
-
-app.get("/posts", (req, res) => {
-  res.json(bbs);
-});
-
-//特定の投稿を取得
-app.get("/posts/:id", (req, res) => {
-  const id = Number(req.params.id);
-  if (id >= 0 && id < bbs.length) {
-    res.json(bbs[id]);
-  } else {
-    res.status(404).json({ error: "Post not found" });
-  }
 });
 
 //編集機能
