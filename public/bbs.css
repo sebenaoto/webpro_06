@@ -3,6 +3,12 @@
     margin: 3px;
 }
 
+.id {
+    font-style: italic;
+    color: gray;
+    margin-right: 10px;
+}
+
 .name {
     font-weight: bold;
     width: 8em;

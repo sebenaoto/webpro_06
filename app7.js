@@ -4,6 +4,8 @@ const app = express();
 
 let bbs = [];  // 本来はDBMSを使用するが，今回はこの変数にデータを蓄える
 
+app.use(express.json());
+
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
@@ -84,9 +86,9 @@ app.post("/add", (req, res) => {
 
 // これより下はBBS関係
 app.post("/check", (req, res) => {
-  // 本来はここでDBMSに問い合わせる
-  res.json( {number: bbs.length });
+  res.json({ messages: bbs }); // bbs 配列を messages に含めて返す
 });
+
 
 app.post("/read", (req, res) => {
   // 本来はここでDBMSに問い合わせる
@@ -96,13 +98,69 @@ app.post("/read", (req, res) => {
   else res.json( {messages: bbs.slice( start )});
 });
 
+// IDのカウンター
+let currentId = 0; 
+
+//IDを
 app.post("/post", (req, res) => {
   const name = req.body.name;
   const message = req.body.message;
-  console.log( [name, message] );
-  // 本来はここでDBMSに保存する
-  bbs.push( { name: name, message: message } );
-  res.json( {number: bbs.length } );
+
+  const newPost = { id: currentId++, name, message};
+  bbs.push(newPost);
+
+  res.json({ number: bbs.length, post: newPost });
+});
+
+//検索機能
+app.get("/search", (req, res) => {
+  const keyword = req.query.keyword.toLowerCase();
+  const results = bbs.filter(post =>
+      post.name.toLowerCase().includes(keyword) || post.message.toLowerCase().includes(keyword)
+  );
+  res.json(results);
+});
+
+app.get("/posts", (req, res) => {
+  res.json(bbs);
+});
+
+//特定の投稿を取得
+app.get("/posts/:id", (req, res) => {
+  const id = Number(req.params.id);
+  if (id >= 0 && id < bbs.length) {
+    res.json(bbs[id]);
+  } else {
+    res.status(404).json({ error: "Post not found" });
+  }
+});
+
+//編集機能
+app.post("/editPost", (req, res) => {
+  const { id, name, message } = req.body; 
+  const post = bbs.find(p => p.id === Number(id));
+  
+  if (!post) {
+    return res.status(404).json({ error: "指定された投稿が見つかりません" });
+  }
+
+  if (name) post.name = name;
+  if (message) post.message = message;
+
+  res.json({ message: "投稿が編集されました", post });
+});
+
+//削除機能
+app.post("/deletePost", (req, res) => {
+  const { id } = req.body; 
+  const postIndex = bbs.findIndex(p => p.id === Number(id));
+
+  if (postIndex === -1) {
+    return res.status(404).json({ error: "指定された投稿が見つかりません" });
+  }
+
+  const deletedPost = bbs.splice(postIndex, 1)[0];
+  res.json({ message: "投稿が削除されました", deletedPost });
 });
 
 app.listen(8080, () => console.log("Example app listening on port 8080!"));
